@@ -6,9 +6,9 @@ import java.util.Date;
 
 
 public class Data {
-
+    public static String dateFormat = "HH:MM:SS";
     private String felsegJel;
-    private String jelszam;
+    private String rendSzam;
     private char location;
     private VehicleType type;
     private int speed;
@@ -22,12 +22,12 @@ public class Data {
         this.felsegJel = felsegJel;
     }
 
-    public String getJelszam() {
-        return jelszam;
+    public String getRendSzam() {
+        return rendSzam;
     }
 
     public void setJelszam(String jelszam) {
-        this.jelszam = jelszam;
+        this.rendSzam = jelszam;
     }
 
     public char getLocation() {
@@ -64,15 +64,31 @@ public class Data {
 
     public Data(String felsegJel, String jelszam, char location, VehicleType type, int speed, Date time) {
         this.felsegJel = felsegJel;
-        this.jelszam = jelszam;
+        this.rendSzam = jelszam;
         this.location = location;
         this.type = type;
         this.speed = speed;
         this.time = time;
     }
 
-    private void fromInput(String input) {
 
+    public static String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+
+        return sdf.format(date);
+    }
+
+    public String getAllInformation() {
+        return getType().getType() + " "
+                + getFelsegJel() + " "
+                + getRendSzam() + " "
+                + formatDate(time);
+    }
+
+    public String getInformationWithoutTime() {
+        return getType().getType() + " "
+                + getFelsegJel() + " "
+                + getRendSzam();
     }
 
 }

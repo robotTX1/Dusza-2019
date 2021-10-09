@@ -1,10 +1,9 @@
 package com.dusza;
 
+import java.lang.invoke.VarHandle;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
@@ -23,6 +22,7 @@ public class SpeedMeter {
     public List<Data> getRecords() {
         return records;
     }
+
 
 
     public void addRecord(String input) {
@@ -70,10 +70,12 @@ public class SpeedMeter {
 
     // fel 1
 
-    private List<Data> getSpeeders() {
+    public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
+        Set<VehicleType> types = new HashSet<VehicleType>(List.of(type));
+
         for (Data v : records) {
-            if (v.getSpeed() > v.getType().getSpeedLimit()) {
+            if (types.contains(v.getType()) && v.getSpeed() > v.getType().getSpeedLimit()) {
                 out.add(v);
             }
         }
@@ -81,13 +83,64 @@ public class SpeedMeter {
     }
 
     public int Fel1_GetSpeederCount() {
-        return getSpeeders().size();
+        return getSpeeders(VehicleType.MOTOR).size();
     }
 
     public String Fel2_GetSpeeders() {
         String out = "";
+        List<Data> speeders = getSpeeders();
+
+        Set<String> types = new HashSet<>();
+        types.add("sz");
+        types.add("b");
+        types.add("t");
 
 
-        return "";
+        for (Data v : speeders) {
+            if (types.contains(v.getType().getType())) {
+                out += v.getInformationWithoutTime() + " "
+                        + (v.getSpeed()-v.getType().getSpeedLimit())
+                        + "\n";
+            }
+        }
+
+        return out;
+    }
+
+    public String Fel3() {
+        // leggyorsabb jármű
+        String out = "";
+        int maxSpeed = 0;
+        Data fastestV = records.get(0);
+
+        for (Data v : records) {
+            if (v.getSpeed() > maxSpeed) {
+                maxSpeed = v.getSpeed();
+                fastestV = v;
+            }
+        }
+        out += maxSpeed;
+
+        if (fastestV.getType().getSpeedLimit() > maxSpeed) {
+            out += " túllépte ";
+        } else {
+            out += " nem_lépte_túl ";
+        }
+
+        out += fastestV.getAllInformation();
+
+        return out;
+    }
+
+    public String Fel4() {
+        Set<String> rendszamok = new HashSet<>();
+
+        for (Data v : records) {
+            if (v.getFelsegJel().equals("H") && ! rendszamok.contains(v.getRendSzam())) {
+                rendszamok.add(v.getRendSzam());
+            }
+
+        }
+    return "";
     }
 }
