@@ -21,8 +21,12 @@ public class Main {
 
         Logger logger = new Logger(logFile);
 
-        logger.log("Hello");
-        logger.save();
+        /////////////////////////////////////////////////////////////////////////////////
 
+        Control control = new Control(ioHandler.readFile());
+
+        // 1. feladat
+
+        SpeedMeter meter = control.getSpeedMeter('A');
     }
 }
