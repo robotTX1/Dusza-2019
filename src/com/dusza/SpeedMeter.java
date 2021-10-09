@@ -45,7 +45,7 @@ public class SpeedMeter {
         int speed;
         Date time;
         speed = Integer.parseInt(data[4]);
-        time = formatStringtoDate(data[5]);
+        time = Data.formatStringToDate(data[5]);
 
         records.add(new Data(felsegJel, jelszam, location, type, speed, time));
     }

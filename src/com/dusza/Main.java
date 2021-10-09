@@ -165,7 +165,7 @@ public class Main {
 
         for(Data d : dataList) {
             if(control.isPresentAtAllPoints(d.getRendSzam())) {
-
+                System.out.println(control.getAverageSpeed(d.getRendSzam(), 'A', 'C'));
             }
         }
 

@@ -2,7 +2,9 @@ package com.dusza;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Control {
     private static final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
@@ -64,14 +66,43 @@ public class Control {
         return present;
     }
 
-    public int getAverageSpeed(String rendszam, char start, char end) {
-        int sum = 0;
+    public boolean isPresentAtPoints(String rendszam, char start, char end) {
+        boolean present = true;
 
-        for(SpeedMeter sm : meterList) {
-            Data data = sm.getData(rendszam);
-            //if(data != null)
+        int startIndex = getABC(start);
+        int endIndex = getABC(end);
+
+        for(int i = startIndex; i < endIndex; i++) {
+            present = present && meterList.get(i).isPresent(rendszam);
         }
-        return 0;
+
+        return present;
+    }
+
+    public float getAverageSpeed(String rendszam, char start, char end) {
+        int startIndex = getABC(start);
+        int endIndex = getABC(end);
+
+        int distance = Math.abs(meterList.get(endIndex).getDistance() - meterList.get(startIndex).getDistance());
+
+        if(isPresentAtPoints(rendszam, start, end)) {
+            SpeedMeter m1 = getSpeedMeter(start);
+            SpeedMeter m2 = getSpeedMeter(end);
+
+            Data d1 = m1.getData(rendszam);
+            Data d2 = m2.getData(rendszam);
+
+            Date t1 = d1.getTime();
+            Date t2 = d2.getTime();
+
+            long dt = Math.abs( t2.getTime()-t1.getTime());
+
+            TimeUnit time = TimeUnit.HOURS;
+            float dTimeH = time.convert(dt, TimeUnit.MILLISECONDS);
+
+            return distance / dTimeH;
+        }
+        return -1f;
     }
 
     public List<Data> getAllData() {
