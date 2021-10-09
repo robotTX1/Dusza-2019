@@ -8,6 +8,7 @@ import java.util.List;
 
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
+
     private int distance;
     private List<Data> records;
 
@@ -29,12 +30,11 @@ public class SpeedMeter {
         String[] data = input.split(",");
         String felsegJel = data[0];
         String jelszam = data[1];
-        VehicleType type = VehicleType.CAR;
+        VehicleType type = null;
 
         char location = data[2].toCharArray()[0];
         switch (data[3]) {
-            case "sz" -> {
-            }
+            case "sz" -> type = VehicleType.CAR;
             case "m" -> type = VehicleType.MOTOR;
             case "b" -> type = VehicleType.BUS;
             case "t" -> type = VehicleType.HEAVY;
@@ -43,7 +43,7 @@ public class SpeedMeter {
         int speed;
         Date time;
         speed = Integer.parseInt(data[4]);
-        time = formatStringtoDate(data[5]);
+        time = formatStringToDate(data[5]);
 
         records.add(new Data(felsegJel, jelszam, location, type, speed, time));
     }
@@ -56,7 +56,7 @@ public class SpeedMeter {
         return sdf.format(date);
     }
 
-    public static Date formatStringtoDate(String inp) {
+    public static Date formatStringToDate(String inp) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
         try {
@@ -86,8 +86,6 @@ public class SpeedMeter {
 
     public String Fel2_GetSpeeders() {
         String out = "";
-
-
         return "";
     }
 }
