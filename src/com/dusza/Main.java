@@ -131,9 +131,13 @@ public class Main {
 
             // ezen járművek átlagsebbessége
 
+
+
             float[] avgSpeeds = new float[(int)mind2.size()/2];
             System.out.println(mind2.size());
             for (int i = 0; i<mind2.size(); i+=2) {
+
+                // control.getAverageSpeed(mind2.get(i).getRendSzam(), );
 
                 Date t1 = mind2.get(i).getTime();
                 Date t2 = mind2.get(i+1).getTime();
