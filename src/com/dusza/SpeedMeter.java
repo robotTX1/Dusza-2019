@@ -1,10 +1,9 @@
 package com.dusza;
 
+import java.lang.invoke.VarHandle;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
@@ -24,12 +23,11 @@ public class SpeedMeter {
     public List<Data> getRecords() {
         return records;
     }
-
-
+  
     public void addRecord(String input) {
         String[] data = input.split(",");
         String felsegJel = data[0];
-        String jelszam = data[1];
+        String rendszam = data[1];
         VehicleType type = null;
 
         char location = data[2].toCharArray()[0];
@@ -45,7 +43,7 @@ public class SpeedMeter {
         speed = Integer.parseInt(data[4]);
         time = formatStringToDate(data[5]);
 
-        records.add(new Data(felsegJel, jelszam, location, type, speed, time));
+        records.add(new Data(felsegJel, rendszam, location, type, speed, time));
     }
 
 
@@ -67,25 +65,15 @@ public class SpeedMeter {
         return null;
     }
 
-
-    // fel 1
-
-    private List<Data> getSpeeders() {
+    public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
+        Set<VehicleType> types = new HashSet<VehicleType>(List.of(type));
+
         for (Data v : records) {
-            if (v.getSpeed() > v.getType().getSpeedLimit()) {
+            if (types.contains(v.getType()) && v.getSpeed() > v.getType().getSpeedLimit()) {
                 out.add(v);
             }
         }
         return out;
-    }
-
-    public int Fel1_GetSpeederCount() {
-        return getSpeeders().size();
-    }
-
-    public String Fel2_GetSpeeders() {
-        String out = "";
-        return "";
     }
 }
