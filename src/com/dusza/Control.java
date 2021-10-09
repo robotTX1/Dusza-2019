@@ -3,7 +3,6 @@ package com.dusza;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class Control {
     private static final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
@@ -11,6 +10,7 @@ public class Control {
     private static final String REGEX = ",";
 
     private final List<SpeedMeter> meterList = new ArrayList<>();
+    private final List<Data> allData = new ArrayList<>();
 
     public Control(List<String> input) {
         String[] meters = input.get(0).split(REGEX);
@@ -26,6 +26,10 @@ public class Control {
 
             SpeedMeter speedMeter = getSpeedMeter(ch);
             speedMeter.addRecord(input.get(i));
+        }
+
+        for(SpeedMeter sm : meterList) {
+            allData.addAll(sm.getRecords());
         }
     }
 
@@ -50,5 +54,27 @@ public class Control {
         return -1;
     }
 
+    public boolean isPresentAtAllPoints(String rendszam) {
+        boolean present = true;
 
+        for(SpeedMeter speedMeter : meterList) {
+            present = present && speedMeter.isPresent(rendszam);
+        }
+
+        return present;
+    }
+
+    public int getAverageSpeed(String rendszam, char start, char end) {
+        int sum = 0;
+
+        for(SpeedMeter sm : meterList) {
+            Data data = sm.getData(rendszam);
+            //if(data != null)
+        }
+        return 0;
+    }
+
+    public List<Data> getAllData() {
+        return allData;
+    }
 }
