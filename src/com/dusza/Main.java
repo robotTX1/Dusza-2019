@@ -2,6 +2,7 @@ package com.dusza;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Main {
 
@@ -28,5 +29,14 @@ public class Main {
         // 1. feladat
 
         SpeedMeter meter = control.getSpeedMeter('A');
+        List<Data> dataList = meter.getSpeeders(VehicleType.MOTOR);
+
+        logger.log(dataList.size());
+
+        // 2. feladat
+        meter = control.getSpeedMeter('B');
+        //dataList = meter.getSpeeders(VehicleType.CAR, VehicleType.)
+
+        logger.save();
     }
 }
