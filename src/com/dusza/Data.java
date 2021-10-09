@@ -6,7 +6,7 @@ import java.util.Date;
 
 
 public class Data {
-    public static String dateFormat = "HH:MM:SS";
+    public static String dateFormat = "hh:mm:ss";
     private String felsegJel;
     private String rendSzam;
     private char location;
@@ -78,17 +78,30 @@ public class Data {
         return sdf.format(date);
     }
 
+    public static Date formatStringToDate(String inp) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+
+        try {
+            return sdf.parse(inp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getAllInformation() {
         return getType().getType() + " "
                 + getFelsegJel() + " "
                 + getRendSzam() + " "
+                + getSpeed() + " "
                 + formatDate(time);
     }
 
     public String getInformationWithoutTime() {
         return getType().getType() + " "
                 + getFelsegJel() + " "
-                + getRendSzam();
+                + getRendSzam() + " "
+                + getSpeed();
     }
 
 }

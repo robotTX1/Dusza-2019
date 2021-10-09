@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.dusza.Data.formatStringToDate;
+
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
     private final int distance;
@@ -48,28 +50,6 @@ public class SpeedMeter {
         records.add(new Data(felsegJel, jelszam, location, type, speed, time));
     }
 
-
-
-    public static String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-
-        return sdf.format(date);
-    }
-
-    public static Date formatStringtoDate(String inp) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-
-        try {
-            return sdf.parse(inp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    // fel 1
-
     public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
         Set<VehicleType> types = new HashSet<>(List.of(type));
@@ -82,65 +62,21 @@ public class SpeedMeter {
         return out;
     }
 
-    public int Fel1_GetSpeederCount() {
-        return getSpeeders(VehicleType.MOTOR).size();
+    public boolean isPresent(String rendszam) {
+        for(Data d : records) {
+            if(d.getRendSzam().equals(rendszam)) return true;
+        }
+        return false;
     }
 
-    public String Fel2_GetSpeeders() {
-        String out = "";
-        List<Data> speeders = getSpeeders();
-
-        Set<String> types = new HashSet<>();
-        types.add("sz");
-        types.add("b");
-        types.add("t");
-
-
-        for (Data v : speeders) {
-            if (types.contains(v.getType().getType())) {
-                out += v.getInformationWithoutTime() + " "
-                        + (v.getSpeed()-v.getType().getSpeedLimit())
-                        + "\n";
-            }
-        }
-
-        return out;
+    public Data getData(int index) {
+        return records.get(index);
     }
 
-    public String Fel3() {
-        // leggyorsabb jármű
-        String out = "";
-        int maxSpeed = 0;
-        Data fastestV = records.get(0);
-
-        for (Data v : records) {
-            if (v.getSpeed() > maxSpeed) {
-                maxSpeed = v.getSpeed();
-                fastestV = v;
-            }
+    public Data getData(String rendszam) {
+        for(int i=0; i<records.size(); i++) {
+            if(rendszam.equals(records.get(i).getRendSzam())) return getData(i);
         }
-        out += maxSpeed;
-
-        if (fastestV.getType().getSpeedLimit() > maxSpeed) {
-            out += " túllépte ";
-        } else {
-            out += " nem_lépte_túl ";
-        }
-
-        out += fastestV.getAllInformation();
-
-        return out;
-    }
-
-    public String Fel4() {
-        Set<String> rendszamok = new HashSet<>();
-
-        for (Data v : records) {
-            if (v.getFelsegJel().equals("H") && ! rendszamok.contains(v.getRendSzam())) {
-                rendszamok.add(v.getRendSzam());
-            }
-
-        }
-    return "";
+        return null;
     }
 }

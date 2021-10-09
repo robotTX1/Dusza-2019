@@ -35,10 +35,15 @@ public class Main {
         logger.log(dataList.size());
 
         // 2. feladat
+        logger.nextTask();
+
         meter = control.getSpeedMeter('B');
-        //dataList = meter.getSpeeders(VehicleType.CAR, VehicleType.)
+        dataList = meter.getSpeeders(VehicleType.CAR, VehicleType.BUS, VehicleType.HEAVY);
 
-
+        for(Data d : dataList) {
+            logger.log(String.format("%s %s %s %d", d.getType().getType(), d.getFelsegJel(), d.getRendSzam(), d.getSpeed() - d.getType().getSpeedLimit()));
+        }
+      
         // 3. feladat
         logger.nextTask();
         meter = control.getSpeedMeter('C');
@@ -80,6 +85,24 @@ public class Main {
             }
         }
         logger.log(rendSzamok.size());
+      
+        // 5. feladat
+
+        logger.nextTask();
+
+        meter = control.getSpeedMeter('C');
+        dataList = meter.getRecords();
+
+        Date start = Data.formatStringToDate("09:00:00");
+        Date end = Data.formatStringToDate("13:00:00");
+
+        for(Data d : dataList) {
+            if(d.getTime().after(start) && d.getTime().before(end)) {
+                if(d.getType() == VehicleType.CAR && d.getSpeed() > 110 && d.getSpeed() <= 130) {
+                    logger.log(d.getAllInformation());
+                }
+            }
+        }
 
         // 6. feladat
         logger.nextTask();
@@ -134,6 +157,16 @@ public class Main {
             }
 
             ++speedMeterIndex;
+        }
+      
+      // 7. feladat
+        logger.nextTask();
+        dataList = control.getAllData();
+
+        for(Data d : dataList) {
+            if(control.isPresentAtAllPoints(d.getRendSzam())) {
+
+            }
         }
 
 

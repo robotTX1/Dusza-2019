@@ -14,17 +14,21 @@ public class Logger {
 
     public Logger(Path logPath) {
         this.logPath = logPath;
+
         logList.add("1. feladat");
+        System.out.println("1. feladat");
     }
 
     public void nextTask() {
         taskNumber++;
         logList.add("");
         logList.add(taskNumber + ". feladat");
+        System.out.println("\n" + taskNumber + ". feladat");
     }
 
     public void log(Object s) {
         logList.add(s.toString());
+        System.out.println(s);
     }
 
     public void save() {
