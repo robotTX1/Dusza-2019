@@ -161,11 +161,12 @@ public class Main {
       
       // 7. feladat
         logger.nextTask();
-        dataList = control.getAllData();
+        dataList = control.getSpeedMeter('A').getRecords();
 
         for(Data d : dataList) {
             if(control.isPresentAtAllPoints(d.getRendSzam())) {
-                System.out.println(control.getAverageSpeed(d.getRendSzam(), 'A', 'C'));
+                float avgSpeed = control.getAverageSpeed(d.getRendSzam(), 'A', 'C');
+                logger.log(String.format("%s %s %s", avgSpeed < d.getType().getSpeedLimit() ? "igen" : "nem", d.getFelsegJel(), d.getRendSzam()));
             }
         }
 
