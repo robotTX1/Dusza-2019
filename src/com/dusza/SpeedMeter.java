@@ -7,9 +7,8 @@ import java.util.*;
 
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
-
-    private int distance;
-    private List<Data> records;
+    private final int distance;
+    private final List<Data> records;
 
     public SpeedMeter(int distance) {
         this.distance = distance;
@@ -23,16 +22,19 @@ public class SpeedMeter {
     public List<Data> getRecords() {
         return records;
     }
-  
+
+
+
     public void addRecord(String input) {
         String[] data = input.split(",");
         String felsegJel = data[0];
-        String rendszam = data[1];
-        VehicleType type = null;
+        String jelszam = data[1];
+        VehicleType type = VehicleType.CAR;
 
         char location = data[2].toCharArray()[0];
         switch (data[3]) {
-            case "sz" -> type = VehicleType.CAR;
+            case "sz" -> {
+            }
             case "m" -> type = VehicleType.MOTOR;
             case "b" -> type = VehicleType.BUS;
             case "t" -> type = VehicleType.HEAVY;
@@ -41,9 +43,9 @@ public class SpeedMeter {
         int speed;
         Date time;
         speed = Integer.parseInt(data[4]);
-        time = formatStringToDate(data[5]);
+        time = formatStringtoDate(data[5]);
 
-        records.add(new Data(felsegJel, rendszam, location, type, speed, time));
+        records.add(new Data(felsegJel, jelszam, location, type, speed, time));
     }
 
 
@@ -54,7 +56,7 @@ public class SpeedMeter {
         return sdf.format(date);
     }
 
-    public static Date formatStringToDate(String inp) {
+    public static Date formatStringtoDate(String inp) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
         try {
@@ -65,9 +67,12 @@ public class SpeedMeter {
         return null;
     }
 
+
+    // fel 1
+
     public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
-        Set<VehicleType> types = new HashSet<VehicleType>(List.of(type));
+        Set<VehicleType> types = new HashSet<>(List.of(type));
 
         for (Data v : records) {
             if (types.contains(v.getType()) && v.getSpeed() > v.getType().getSpeedLimit()) {
@@ -75,5 +80,67 @@ public class SpeedMeter {
             }
         }
         return out;
+    }
+
+    public int Fel1_GetSpeederCount() {
+        return getSpeeders(VehicleType.MOTOR).size();
+    }
+
+    public String Fel2_GetSpeeders() {
+        String out = "";
+        List<Data> speeders = getSpeeders();
+
+        Set<String> types = new HashSet<>();
+        types.add("sz");
+        types.add("b");
+        types.add("t");
+
+
+        for (Data v : speeders) {
+            if (types.contains(v.getType().getType())) {
+                out += v.getInformationWithoutTime() + " "
+                        + (v.getSpeed()-v.getType().getSpeedLimit())
+                        + "\n";
+            }
+        }
+
+        return out;
+    }
+
+    public String Fel3() {
+        // leggyorsabb jármű
+        String out = "";
+        int maxSpeed = 0;
+        Data fastestV = records.get(0);
+
+        for (Data v : records) {
+            if (v.getSpeed() > maxSpeed) {
+                maxSpeed = v.getSpeed();
+                fastestV = v;
+            }
+        }
+        out += maxSpeed;
+
+        if (fastestV.getType().getSpeedLimit() > maxSpeed) {
+            out += " túllépte ";
+        } else {
+            out += " nem_lépte_túl ";
+        }
+
+        out += fastestV.getAllInformation();
+
+        return out;
+    }
+
+    public String Fel4() {
+        Set<String> rendszamok = new HashSet<>();
+
+        for (Data v : records) {
+            if (v.getFelsegJel().equals("H") && ! rendszamok.contains(v.getRendSzam())) {
+                rendszamok.add(v.getRendSzam());
+            }
+
+        }
+    return "";
     }
 }
