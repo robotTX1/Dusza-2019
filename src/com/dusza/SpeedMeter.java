@@ -9,9 +9,8 @@ import static com.dusza.Data.formatStringToDate;
 
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
-
-    private int distance;
-    private List<Data> records;
+    private final int distance;
+    private final List<Data> records;
 
     public SpeedMeter(int distance) {
         this.distance = distance;
@@ -25,16 +24,19 @@ public class SpeedMeter {
     public List<Data> getRecords() {
         return records;
     }
-  
+
+
+
     public void addRecord(String input) {
         String[] data = input.split(",");
         String felsegJel = data[0];
-        String rendszam = data[1];
-        VehicleType type = null;
+        String jelszam = data[1];
+        VehicleType type = VehicleType.CAR;
 
         char location = data[2].toCharArray()[0];
         switch (data[3]) {
-            case "sz" -> type = VehicleType.CAR;
+            case "sz" -> {
+            }
             case "m" -> type = VehicleType.MOTOR;
             case "b" -> type = VehicleType.BUS;
             case "t" -> type = VehicleType.HEAVY;
@@ -43,14 +45,14 @@ public class SpeedMeter {
         int speed;
         Date time;
         speed = Integer.parseInt(data[4]);
-        time = formatStringToDate(data[5]);
+        time = formatStringtoDate(data[5]);
 
-        records.add(new Data(felsegJel, rendszam, location, type, speed, time));
+        records.add(new Data(felsegJel, jelszam, location, type, speed, time));
     }
 
     public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
-        Set<VehicleType> types = new HashSet<VehicleType>(List.of(type));
+        Set<VehicleType> types = new HashSet<>(List.of(type));
 
         for (Data v : records) {
             if (types.contains(v.getType()) && v.getSpeed() > v.getType().getSpeedLimit()) {
