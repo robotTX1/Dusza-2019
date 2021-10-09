@@ -3,16 +3,17 @@ package com.dusza;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class Control {
-    private static final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toLowerCase().toCharArray();
+    private static final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
 
     private static final String REGEX = ",";
 
     private final List<SpeedMeter> meterList = new ArrayList<>();
 
     public Control(List<String> input) {
-        String[] meters = input.get(0).split(" ");
+        String[] meters = input.get(0).split(REGEX);
 
         for(String s : meters) {
             int num = Integer.parseInt(s);

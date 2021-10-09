@@ -23,8 +23,8 @@ public class Logger {
         logList.add(taskNumber + ". feladat");
     }
 
-    public void log(String s) {
-        logList.add(s);
+    public void log(Object s) {
+        logList.add(s.toString());
     }
 
     public void save() {
