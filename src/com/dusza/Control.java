@@ -95,10 +95,9 @@ public class Control {
             Date t1 = d1.getTime();
             Date t2 = d2.getTime();
 
-            long dt = Math.abs( t2.getTime()-t1.getTime());
+            long dt = Math.abs(t2.getTime()-t1.getTime());
 
-            TimeUnit time = TimeUnit.HOURS;
-            float dTimeH = time.convert(dt, TimeUnit.MILLISECONDS);
+            float dTimeH = (float)dt / (1000*3600);
 
             return distance / dTimeH;
         }
