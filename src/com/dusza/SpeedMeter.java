@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.dusza.Data.formatStringToDate;
+
 public class SpeedMeter {
     public static String dateFormat = "HH:MM:SS";
 
@@ -46,25 +48,6 @@ public class SpeedMeter {
         records.add(new Data(felsegJel, rendszam, location, type, speed, time));
     }
 
-
-
-    public static String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-
-        return sdf.format(date);
-    }
-
-    public static Date formatStringToDate(String inp) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-
-        try {
-            return sdf.parse(inp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public List<Data> getSpeeders(VehicleType... type) {
         List<Data> out = new ArrayList<>();
         Set<VehicleType> types = new HashSet<VehicleType>(List.of(type));
@@ -75,5 +58,23 @@ public class SpeedMeter {
             }
         }
         return out;
+    }
+
+    public boolean isPresent(String rendszam) {
+        for(Data d : records) {
+            if(d.getRendSzam().equals(rendszam)) return true;
+        }
+        return false;
+    }
+
+    public Data getData(int index) {
+        return records.get(index);
+    }
+
+    public Data getData(String rendszam) {
+        for(int i=0; i<records.size(); i++) {
+            if(rendszam.equals(records.get(i).getRendSzam())) return getData(i);
+        }
+        return null;
     }
 }
