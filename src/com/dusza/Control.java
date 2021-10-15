@@ -66,6 +66,9 @@ public class Control {
         return present;
     }
 
+    // 10. feladat
+    // A rendszer A-Z-ig tudja kezelni a sebességmérőket, ennek köszönhetően a kód tud 3-nál több sebesség mérőt is kezelni, ami sokkal hasznosabbá teszi a programot
+
     public boolean isPresentAtPoints(String rendszam, char start, char end) {
         boolean present = true;
 
@@ -77,6 +80,24 @@ public class Control {
         }
 
         return present;
+    }
+
+    public boolean isPresentAnyPoint(String rendszam) {
+        for (SpeedMeter speedMeter : meterList) {
+            if (speedMeter.isPresent(rendszam)) return true;
+        }
+        return false;
+    }
+
+    public List<SpeedMeter> presentAtPoints(String rendszam) {
+        List<SpeedMeter> result = new ArrayList<>();
+
+        for (SpeedMeter speedMeter : meterList) {
+            if (speedMeter.isPresent(rendszam))
+                result.add(speedMeter);
+        }
+
+        return result;
     }
 
     public float getAverageSpeed(String rendszam, char start, char end) {
@@ -102,6 +123,31 @@ public class Control {
             return distance / dTimeH;
         }
         return -1f;
+    }
+
+    public List<Data> getWrongHungarianRendszam() {
+        List<Data> result = new ArrayList<>();
+
+        for(SpeedMeter sp : meterList) {
+            for(Data d : sp.getRecords()) {
+                if(d.getFelsegJel().equals("H")) {
+                    if(!d.getRendSzam().contains("-")) {
+                        result.add(d);
+                        continue;
+                    }
+                    String[] rendszamParts = d.getRendSzam().split("-");
+                    if(!rendszamParts[0].matches("^[a-zA-Z]*$")) {
+                        result.add(d);
+                        continue;
+                    }
+                    if(!rendszamParts[1].matches("[0-9]+")) {
+                        result.add(d);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     public List<Data> getAllData() {
