@@ -2,6 +2,7 @@ package com.dusza;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -131,7 +132,7 @@ public class Main {
 
             // ezen járművek átlagsebbessége
 
-            float[] avgSpeeds = new float[(int)mind2.size()/2];
+            float[] avgSpeeds = new float[mind2.size() /2];
             System.out.println(mind2.size());
             for (int i = 0; i<mind2.size(); i+=2) {
 
@@ -168,6 +169,49 @@ public class Main {
                 float avgSpeed = control.getAverageSpeed(d.getRendSzam(), 'A', 'C');
                 logger.log(String.format("%s %s %s", avgSpeed < d.getType().getSpeedLimit() ? "igen" : "nem", d.getFelsegJel(), d.getRendSzam()));
             }
+        }
+
+        // 8. feladat
+
+        logger.nextTask();
+
+        System.out.print("Kérek egy rendszámot ellenőrzésre: ");
+        Scanner input = new Scanner(System.in);
+        String rendszam = input.nextLine();
+        input.close();
+
+        List<SpeedMeter> speedMeters = control.presentAtPoints(rendszam);
+
+        boolean tul = false;
+
+        if(speedMeters.size() > 0) {
+            for(SpeedMeter m : speedMeters) {
+                dataList = m.getRecords();
+                for(Data d : dataList) {
+                    if(d.getType() == VehicleType.SPECIAL && d.getRendSzam().equalsIgnoreCase(rendszam)) {
+                        if(d.getSpeed() > VehicleType.CAR.getSpeedLimit()) tul = true;
+                        break;
+                    }
+                }
+
+            }
+            if(tul) {
+                logger.log("szerepel tul_lepte");
+            } else {
+                logger.log("szerepel nem_lepte_tul");
+            }
+        } else {
+            logger.log("nem_szerepel");
+        }
+
+        // 9. feladat
+
+        logger.nextTask();
+
+        dataList = control.getWrongHungarianRendszam();
+
+        for(Data d : dataList) {
+            logger.log(d.getRendSzam());
         }
 
 
